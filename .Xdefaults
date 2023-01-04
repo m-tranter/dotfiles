@@ -1,0 +1,15 @@
+
+URxvt*geometry: 84x25
+
+URxvt*scrollBar: false
+URxvt*scrollBar_right: false
+URxvt*scrollBar_floating: false
+URxvt*background: Black
+URxvt*foreground: White
+URxvt*colorUL: yellow
+URxvt*underlineColor: yellow
+urxvt*font: -*-terminus-*-*-*-*-18-*-*-*-*-*-*-*
+
+
+
+

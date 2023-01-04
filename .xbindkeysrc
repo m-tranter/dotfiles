@@ -1,0 +1,72 @@
+# xbindkeys config file "xbindkeys_show" control+shift+q
+
+# volume controls
+"pactl set-sink-volume @DEFAULT_SINK@ +5%"
+m:0x10 + c:123
+"pactl set-sink-volume @DEFAULT_SINK@ +5%"
+m:0x0 + c:75
+
+"pactl set-sink-volume @DEFAULT_SINK@ -5%"
+m:0x10 + c:122
+"pactl set-sink-volume @DEFAULT_SINK@ -5%"
+m:0x0 + c:76
+
+# Mute
+"killall play"
+m:0x10 + c:121
+
+"killall play"
+m:0x10 + c:95
+
+# mtpaint
+"mtpaint"
+mod4 + g
+
+
+# soffice 
+"soffice"
+mod4 + s
+
+# screenshot
+"shotgun.sh"
+m:0x0 + c:218
+
+"shotgun.sh"
+Mod2 + Print
+
+# python
+"(cd ~/python && idle)"
+mod4 + p
+
+# rox 
+"rox"
+Mod4+r
+
+# root rox
+"sudo rox"
+Shift+Mod4+r
+
+#root terminal
+"sudo urxvt"
+Shift+Mod2+Mod4 + Return
+
+# mount sdb1 
+"mount.sh"
+mod4+d
+
+# unmount sdb1 
+"urxvt -g 30x3 -e umount.sh"
+Shift+Mod4+d
+
+# browser 
+"chromium  --disk-cache-dir=/tmp/cache"
+Mod4+w
+
+# poweroff
+"(sync && shutdown -h now)"
+Shift+Mod4+q
+
+# open wifi.sh
+"sudo wpa_gui"
+Shift+Mod4+w
+

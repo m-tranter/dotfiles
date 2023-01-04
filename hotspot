@@ -1,0 +1,7 @@
+#!/bin/bash
+
+killall wpa_supplicant 
+
+wpa_supplicant -qq -i wlo1 -c <(wpa_passphrase mark grap3fruit) &
+dhcpcd -q wlo1 
+

@@ -1,0 +1,9 @@
+snap 10
+bw 1
+term urxvt -g 84x20+0+0 
+app stalonetray/stalonetray -s
+fg red
+bg #333333
+nosoliddrag
+mask1 mod4
+
