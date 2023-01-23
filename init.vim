@@ -1,8 +1,41 @@
-" Use Vim settings, rather than Vi settings (much better!).
 set nocompatible
 set shortmess=atI
 set vb
 set noswapfile
+set relativenumber
+set number
+set colorcolumn=80
+
+" COC settings
+command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
+set nobackup
+set nowritebackup
+set updatetime=300
+set signcolumn=yes
+set foldmethod=indent
+set foldlevel=99
+set backspace=indent,eol,start
+set expandtab
+set shiftwidth=2
+set autoindent
+set smartindent
+set tabstop=2
+set history=50		" keep 50 lines of command line history
+set ruler		" show the cursor position all the time
+set showcmd		" display incomplete commands
+set incsearch		" do incremental searching
+set hlsearch
+set showmatch
+nnoremap <leader><space> :noh<cr>
+
+set hidden
+set cursorline
+set ttyfast
+set laststatus=2
+let mapleader=","
+set ignorecase
+set smartcase
+set gdefault
 
 " plug
 call plug#begin()
@@ -23,11 +56,8 @@ Plug 'itchyny/lightline.vim'
 Plug 'preservim/nerdcommenter'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'StanAngeloff/php.vim'
 call plug#end()
-
 nnoremap <silent> <C-p> :Files<CR>
-
 
 " mappings
 ino <up> <Nop>
@@ -50,24 +80,17 @@ imap <leader>" ""<ESC>i
 imap <leader>( ()<ESC>i
 imap <leader>[ []<ESC>i
 
-
-" code folding
-set foldmethod=indent
-set foldlevel=99
-
-" allow backspacing over everything in insert mode
-set backspace=indent,eol,start
-set expandtab
-set shiftwidth=2
-set autoindent
-set smartindent
-set tabstop=2
-
-
-set history=50		" keep 50 lines of command line history
-set ruler		" show the cursor position all the time
-set showcmd		" display incomplete commands
-set incsearch		" do incremental searching
+nnoremap j gj
+nnoremap k gk
+inoremap <F1> <ESC>
+nnoremap <F1> <ESC>
+vnoremap <F1> <ESC>
+inoremap jj <ESC>
+nnoremap <leader>w <C-w>v<C-w>l
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
 " Don't use Ex mode, use Q for formatting
 map Q gq
@@ -83,16 +106,6 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
 endif
 
-" Line Numbering
-set relativenumber
-set number
-set colorcolumn=80
-
-" COC settings
-set nobackup
-set nowritebackup
-set updatetime=300
-set signcolumn=yes
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<Tab>" :
@@ -129,7 +142,9 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
-
+autocmd BufWritePre   *.js call CocAction('format')
+autocmd BufWritePre   *.html call CocAction('format')
+autocmd BufWritePre   *.css call CocAction('format')
 augroup mygroup
   autocmd!
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
@@ -205,6 +220,8 @@ set clipboard=unnamedplus
   " Use the default filetype settings, so that mail gets 'tw' set to 79,
   " 'cindent' is on in C files, etc.
   " Also load indent files, to automatically do language-dependent indenting.
+  filetype off
+  set modelines=0
   filetype plugin indent on
 
   " Put these in an autocmd group, so that we can delete them easily.
