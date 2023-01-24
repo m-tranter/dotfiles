@@ -1,65 +1,71 @@
-set nocompatible
-set shortmess=atI
-set vb
-set noswapfile
-set relativenumber
-set number
-set colorcolumn=80
-
-" COC settings
-command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
-set nobackup
-set nowritebackup
-set updatetime=300
-set signcolumn=yes
-set foldmethod=indent
-set foldlevel=99
-set backspace=indent,eol,start
-set expandtab
-set shiftwidth=2
-set autoindent
-set smartindent
-set tabstop=2
-set history=50		" keep 50 lines of command line history
-set ruler		" show the cursor position all the time
-set showcmd		" display incomplete commands
-set incsearch		" do incremental searching
-set hlsearch
-set showmatch
-nnoremap <leader><space> :noh<cr>
-
-set hidden
-set cursorline
-set ttyfast
-set laststatus=2
+color gruvbox
 let mapleader=","
-set ignorecase
-set smartcase
+set autoindent
+set backspace=indent,eol,start
+set clipboard=unnamedplus
+set colorcolumn=80
+set cursorline
+set expandtab
+set foldlevel=99
+set foldmethod=indent
 set gdefault
+set hidden
+set history=10		" keep 50 lines of command line history
+set hlsearch
+set ignorecase
+set incsearch		" do incremental searching
+set laststatus=2
+set lazyredraw
+set mouse=
+set nobackup
+set nocompatible
+set noswapfile
+set nowritebackup
+set number
+set relativenumber
+set ruler		" show the cursor position all the time
+set shiftwidth=2
+set shortmess=atI
+set showcmd		" display incomplete commands
+set showmatch
+set signcolumn=yes
+set smartcase
+set smartindent
+set t_Co=256
+set tabstop=2
+set ttyfast
+set updatetime=300
+set vb
+
 
 " plug
 call plug#begin()
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'tpope/vim-fugitive'
-Plug 'ap/vim-css-color'
-Plug 'posva/vim-vue'
-Plug 'tpope/vim-surround'
+"Plug 'alvan/vim-closetag'
+"Plug 'rust-lang/rust.vim'
 Plug 'Yggdroot/indentLine'
-Plug 'alvan/vim-closetag'
-Plug 'mattn/emmet-vim'
 Plug 'andymass/vim-matchup'
-Plug 'junegunn/fzf.vim'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'rust-lang/rust.vim'
-Plug 'pangloss/vim-javascript'
+Plug 'ap/vim-css-color'
 Plug 'itchyny/lightline.vim'
-Plug 'preservim/nerdcommenter'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'mattn/emmet-vim'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'pangloss/vim-javascript'
+Plug 'posva/vim-vue'
+Plug 'preservim/nerdcommenter'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
 call plug#end()
-nnoremap <silent> <C-p> :Files<CR>
 
 " mappings
+nnoremap <silent> <C-p> :Files<CR>
+" use double-Esc to completely clear the search buffer
+nnoremap <silent> <Esc><Esc> :let @/ = ""<CR>
+" use space to retain the search buffer and toggle highlighting off/on
+nnoremap <silent> <Space> :set hlsearch!<CR>
+
 ino <up> <Nop>
 ino <down> <Nop> 
 ino <left> <Nop>
@@ -80,8 +86,9 @@ imap <leader>" ""<ESC>i
 imap <leader>( ()<ESC>i
 imap <leader>[ []<ESC>i
 
-nnoremap j gj
-nnoremap k gk
+"nnoremap j gj
+"nnoremap k gk
+nnoremap <leader><space> :noh<cr>
 inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
@@ -99,20 +106,15 @@ map Q gq
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
 
-
-" Switch syntax highlighting on, when the terminal has colors
-if &t_Co > 2 || has("gui_running")
-  syntax on
-  set hlsearch
-endif
-
+" COC settings
+command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 function! CheckBackspace() abort
   let col = col('.') - 1
@@ -190,98 +192,57 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 let g:user_emmet_leader_key='<M-c>'
 " Emmett snippet things
 let g:user_emmet_settings = {
-\  'variables': {'lang': 'en'},
-\  'html': {
-\    'default_attributes': {
-\      'option': {'value': v:null},
-\      'textarea': {'id': v:null, 'name': v:null, 'cols': 10, 'rows': 10},
-\    },
-\    'snippets': {
-\      'html:5': "<!DOCTYPE html>\n"
-\              ."<html lang=\"${lang}\">\n"
-\              ."<head>\n"
-\              ."\t<meta charset=\"${charset}\"/>\n"
-\              ."\t<link rel=\"stylesheet\" href=\"\"/>\n"
-\              ."\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n"
-\              ."\t<title></title>\n"
-\              ."</head>\n"
-\              ."<body>\n\t${child}|\n</body>\n"
-\              ."</html>",
-\    },
-\  },
-\}
+      \  'variables': {'lang': 'en'},
+      \  'html': {
+      \    'default_attributes': {
+      \      'option': {'value': v:null},
+      \      'textarea': {'id': v:null, 'name': v:null, 'cols': 10, 'rows': 10},
+      \    },
+      \    'snippets': {
+      \      'html:5': "<!DOCTYPE html>\n"
+      \              ."<html lang=\"${lang}\">\n"
+      \              ."<head>\n"
+      \              ."\t<meta charset=\"${charset}\"/>\n"
+      \              ."\t<link rel=\"stylesheet\" href=\"\"/>\n"
+      \              ."\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n"
+      \              ."\t<title></title>\n"
+      \              ."</head>\n"
+      \              ."<body>\n\t${child}|\n</body>\n"
+      \              ."</html>",
+      \    },
+      \  },
+      \}
 
+" Enable file type detection.
+" Also load indent files, to automatically do language-dependent indenting.
+filetype off
+set modelines=0
+filetype plugin indent on
 
-set t_Co=256
-color gruvbox
-set clipboard=unnamedplus
-
-  " Enable file type detection.
-  " Use the default filetype settings, so that mail gets 'tw' set to 79,
-  " 'cindent' is on in C files, etc.
-  " Also load indent files, to automatically do language-dependent indenting.
-  filetype off
-  set modelines=0
-  filetype plugin indent on
-
-  " Put these in an autocmd group, so that we can delete them easily.
-  augroup vimrcEx
+" Put these in an autocmd group, so that we can delete them easily.
+augroup vimrcEx
   au!
 
   " For all text files set 'textwidth' to 80 characters.
-autocmd FileType text setlocal wrap
-autocmd FileType text setlocal nolist
-autocmd FileType text setlocal linebreak 
+  autocmd FileType text setlocal wrap
+  autocmd FileType text setlocal nolist
+  autocmd FileType text setlocal linebreak 
 
 
-  augroup END
+augroup END
 
-" TextEdit might fail if hidden is not set.
-set hidden
 
-let g:closetag_filenames = '*.html,*.js,*.xhtml,*.phtml'
+"let g:closetag_filenames = '*.html,*.js,*.xhtml,*.phtml'
+"let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
+"let g:closetag_filetypes = 'html,xhtml,js,phtml'
+"let g:closetag_xhtml_filetypes = 'xhtml,js,jsx'
+"let g:closetag_emptyTags_caseSensitive = 1
+"let g:closetag_regions = {
+      "\ 'typescript.tsx': 'jsxRegion,tsxRegion',
+      "\ 'javascript.jsx': 'jsxRegion',
+      "\ 'typescriptreact': 'jsxRegion,tsxRegion',
+      "\ 'javascriptreact': 'jsxRegion',
+      "\ }
+"let g:closetag_shortcut = '>'
+"let g:closetag_close_shortcut = '<leader>>'
 
-" filenames like *.xml, *.xhtml, ...
-" This will make the list of non-closing tags self-closing in the specified files.
-"
-let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
-
-" filetypes like xml, html, xhtml, ...
-" These are the file types where this plugin is enabled.
-"
-let g:closetag_filetypes = 'html,xhtml,js,phtml'
-
-" filetypes like xml, xhtml, ...
-" This will make the list of non-closing tags self-closing in the specified files.
-"
-let g:closetag_xhtml_filetypes = 'xhtml,js,jsx'
-
-" integer value [0|1]
-" This will make the list of non-closing tags case-sensitive (e.g. `<Link>` will be closed while `<link>` won't.)
-"
-let g:closetag_emptyTags_caseSensitive = 1
-
-" dict
-" Disables auto-close if not in a "valid" region (based on filetype)
-"
-let g:closetag_regions = {
-    \ 'typescript.tsx': 'jsxRegion,tsxRegion',
-    \ 'javascript.jsx': 'jsxRegion',
-    \ 'typescriptreact': 'jsxRegion,tsxRegion',
-    \ 'javascriptreact': 'jsxRegion',
-    \ }
-
-" Shortcut for closing tags, default is '>'
-"
-let g:closetag_shortcut = '>'
-
-" Add > at current position without closing the current tag, default is ''
-"
-let g:closetag_close_shortcut = '<leader>>'
-
-" use double-Esc to completely clear the search buffer
-nnoremap <silent> <Esc><Esc> :let @/ = ""<CR>
-" use space to retain the search buffer and toggle highlighting off/on
-nnoremap <silent> <Space> :set hlsearch!<CR>
-
-set mouse=
