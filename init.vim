@@ -10,23 +10,22 @@ set foldlevel=99
 set foldmethod=indent
 set gdefault
 set hidden
-set history=10		" keep 50 lines of command line history
+set history=10
 set hlsearch
 set ignorecase
-set incsearch		" do incremental searching
+set incsearch
 set laststatus=2
 set lazyredraw
-set mouse=
 set nobackup
 set nocompatible
 set noswapfile
 set nowritebackup
 set number
 set relativenumber
-set ruler		" show the cursor position all the time
+set ruler
 set shiftwidth=2
 set shortmess=atI
-set showcmd		" display incomplete commands
+set showcmd
 set showmatch
 set signcolumn=yes
 set smartcase
@@ -35,13 +34,16 @@ set t_Co=256
 set tabstop=2
 set ttyfast
 set updatetime=300
+set modelines=0
 set vb
-
+filetype off
+filetype plugin indent on
 
 " plug
 call plug#begin()
-"Plug 'alvan/vim-closetag'
-"Plug 'rust-lang/rust.vim'
+Plug 'alvan/vim-closetag'
+Plug 'mattn/emmet-vim'
+Plug 'jiangmiao/auto-pairs'
 Plug 'Yggdroot/indentLine'
 Plug 'andymass/vim-matchup'
 Plug 'ap/vim-css-color'
@@ -49,22 +51,38 @@ Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'ludovicchabant/vim-gutentags'
-Plug 'mattn/emmet-vim'
-Plug 'maxmellon/vim-jsx-pretty'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'pangloss/vim-javascript'
 Plug 'posva/vim-vue'
 Plug 'preservim/nerdcommenter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
+"Plug 'maxmellon/vim-jsx-pretty'
+"Plug 'rust-lang/rust.vim'
 call plug#end()
+
+" Settings for integrated terminal. 
+set splitright
+set splitbelow
+tnoremap <Esc> <C-\><C-n>
+au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+function! OpenTerminal()
+  split term://bash
+  resize 5
+endfunction
+nnoremap <c-n> :call OpenTerminal()<CR>
 
 " mappings
 nnoremap <silent> <C-p> :Files<CR>
+
 " use double-Esc to completely clear the search buffer
 nnoremap <silent> <Esc><Esc> :let @/ = ""<CR>
 " use space to retain the search buffer and toggle highlighting off/on
 nnoremap <silent> <Space> :set hlsearch!<CR>
+
+" paste in visual mode without overwriting register
+vnoremap p "0p
+vnoremap P "0P
 
 ino <up> <Nop>
 ino <down> <Nop> 
@@ -81,18 +99,15 @@ vno <down> <Nop>
 vno <left> <Nop>
 vno <right> <Nop>
 
-imap <leader>' ''<ESC>i
-imap <leader>" ""<ESC>i
-imap <leader>( ()<ESC>i
-imap <leader>[ []<ESC>i
-
+"This is if you want to move by visual lines.
 "nnoremap j gj
 "nnoremap k gk
-nnoremap <leader><space> :noh<cr>
-inoremap <F1> <ESC>
-nnoremap <F1> <ESC>
-vnoremap <F1> <ESC>
+"inoremap <F1> <ESC>
+"nnoremap <F1> <ESC>
+"vnoremap <F1> <ESC>
 inoremap jj <ESC>
+
+" Easier management of splits.
 nnoremap <leader>w <C-w>v<C-w>l
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -189,7 +204,7 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 "Emmett key
-let g:user_emmet_leader_key='<M-c>'
+let g:user_emmet_leader_key=','
 " Emmett snippet things
 let g:user_emmet_settings = {
       \  'variables': {'lang': 'en'},
@@ -213,36 +228,26 @@ let g:user_emmet_settings = {
       \  },
       \}
 
-" Enable file type detection.
-" Also load indent files, to automatically do language-dependent indenting.
-filetype off
-set modelines=0
-filetype plugin indent on
 
 " Put these in an autocmd group, so that we can delete them easily.
 augroup vimrcEx
   au!
-
-  " For all text files set 'textwidth' to 80 characters.
   autocmd FileType text setlocal wrap
   autocmd FileType text setlocal nolist
   autocmd FileType text setlocal linebreak 
-
-
 augroup END
 
 
-"let g:closetag_filenames = '*.html,*.js,*.xhtml,*.phtml'
-"let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
-"let g:closetag_filetypes = 'html,xhtml,js,phtml'
-"let g:closetag_xhtml_filetypes = 'xhtml,js,jsx'
-"let g:closetag_emptyTags_caseSensitive = 1
-"let g:closetag_regions = {
-      "\ 'typescript.tsx': 'jsxRegion,tsxRegion',
-      "\ 'javascript.jsx': 'jsxRegion',
-      "\ 'typescriptreact': 'jsxRegion,tsxRegion',
-      "\ 'javascriptreact': 'jsxRegion',
-      "\ }
-"let g:closetag_shortcut = '>'
-"let g:closetag_close_shortcut = '<leader>>'
+let g:closetag_filenames = '*.html,*.js,*.xhtml,*.phtml'
+let g:closetag_filetypes = 'html,xhtml,js,phtml'
+let g:closetag_emptyTags_caseSensitive = 1
+let g:closetag_regions = {
+      \ 'typescript.tsx': 'jsxRegion,tsxRegion',
+      \ 'javascript.jsx': 'jsxRegion',
+      \ 'typescriptreact': 'jsxRegion,tsxRegion',
+      \ 'javascriptreact': 'jsxRegion',
+      \ }
+let g:closetag_shortcut = '>'
+let g:closetag_close_shortcut = '<leader>>'
 
+set mouse-=a
