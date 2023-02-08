@@ -38,9 +38,11 @@ set modelines=0
 set vb
 filetype off
 filetype plugin indent on
+let g:ale_disable_lsp = 1
 
 " plug
 call plug#begin()
+Plug 'ethanholz/nvim-lastplace'
 Plug 'alvan/vim-closetag'
 Plug 'mattn/emmet-vim'
 Plug 'jiangmiao/auto-pairs'
@@ -61,6 +63,8 @@ Plug 'tpope/vim-surround'
 "Plug 'rust-lang/rust.vim'
 call plug#end()
 
+lua require'nvim-lastplace'.setup{}
+
 " Settings for integrated terminal. 
 set splitright
 set splitbelow
@@ -73,8 +77,12 @@ endfunction
 nnoremap <c-n> :call OpenTerminal()<CR>
 
 " mappings
-nnoremap <silent> <C-p> :Files<CR>
 
+nnoremap x "_x
+xnoremap x "_x
+nnoremap <silent> <C-p> :Files<CR>
+nnoremap <Space>w :write<CR>
+nnoremap <Leader>a :keepjumps normal! ggVG<CR>
 " use double-Esc to completely clear the search buffer
 nnoremap <silent> <Esc><Esc> :let @/ = ""<CR>
 " use space to retain the search buffer and toggle highlighting off/on
@@ -83,6 +91,8 @@ nnoremap <silent> <Space> :set hlsearch!<CR>
 " paste in visual mode without overwriting register
 vnoremap p "0p
 vnoremap P "0P
+nnoremap p "0p
+nnoremap P "0P
 
 ino <up> <Nop>
 ino <down> <Nop> 
@@ -121,7 +131,9 @@ map Q gq
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
 
+
 " COC settings
+let g:coc_global_extensions = ['coc-prettier',  'coc-eslint', 'coc-htmlhint', 'coc-html', 'coc-tsserver']
 command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
@@ -142,10 +154,6 @@ else
 endif
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
 nnoremap <silent> K :call ShowDocumentation()<CR>
 
 function! ShowDocumentation()
@@ -156,9 +164,6 @@ function! ShowDocumentation()
   endif
 endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
-nmap <leader>rn <Plug>(coc-rename)
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
 autocmd BufWritePre   *.js call CocAction('format')
 autocmd BufWritePre   *.html call CocAction('format')
 autocmd BufWritePre   *.css call CocAction('format')
@@ -167,19 +172,6 @@ augroup mygroup
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>ac  <Plug>(coc-codeaction)
-nmap <leader>qf  <Plug>(coc-fix-current)
-nmap <leader>cl  <Plug>(coc-codelens-action)
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
 if has('nvim-0.4.0') || has('patch-8.2.0750')
   nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
   nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
@@ -188,20 +180,10 @@ if has('nvim-0.4.0') || has('patch-8.2.0750')
   vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
   vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 endif
-nmap <silent> <C-s> <Plug>(coc-range-select)
-xmap <silent> <C-s> <Plug>(coc-range-select)
 command! -nargs=0 Format :call CocActionAsync('format')
 command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
-nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 "Emmett key
 let g:user_emmet_leader_key=','
