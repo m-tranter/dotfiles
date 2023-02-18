@@ -1,4 +1,3 @@
--- Mappings
 
 vim.cmd("map <ScrollWheelUp> <Nop>")
 vim.cmd("map <ScrollWheelDown> <Nop>")
