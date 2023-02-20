@@ -6,8 +6,8 @@ require("remap")
 
 return require("packer").startup(
   function(use)
- use "norcalli/nvim-colorizer.lua"
     use "Yggdroot/indentLine"
+    use "norcalli/nvim-colorizer.lua"
     use "dense-analysis/ale"
     use "ethanholz/nvim-lastplace"
     use "jiangmiao/auto-pairs"
@@ -15,12 +15,12 @@ return require("packer").startup(
     use "mfussenegger/nvim-lint"
     use "mhartington/formatter.nvim"
     use "nvim-lualine/lualine.nvim"
+    use({"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"})
     use "preservim/nerdcommenter"
     use "tpope/vim-fugitive"
     use "tpope/vim-surround"
     use "windwp/nvim-ts-autotag"
     use "wbthomason/packer.nvim"
-    use({"nvim-treesitter/nvim-treesitter", run = ":TSUpdate"})
     use {
       "nvim-telescope/telescope.nvim",
       tag = "0.1.1",
