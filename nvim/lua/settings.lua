@@ -1,4 +1,5 @@
-vim.cmd("colorscheme gruvbox")
+vim.o.background = "dark"
+vim.cmd([[colorscheme gruvbox]])
 vim.g.user_emmet_leader_key = ","
 vim.g.mapleader = ","
 vim.opt.autoindent = true

@@ -7,6 +7,8 @@ require("remap")
 return require("packer").startup(
   function(use)
     use "Yggdroot/indentLine"
+    use { "ellisonleao/gruvbox.nvim" }
+    use "posva/vim-vue"
     use "norcalli/nvim-colorizer.lua"
     use "dense-analysis/ale"
     use "ethanholz/nvim-lastplace"
