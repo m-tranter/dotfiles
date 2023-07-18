@@ -34,6 +34,8 @@ vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
 vim.opt.updatetime = 50
 vim.opt.wrap = true
+vim.opt.updatetime = 50
+
 
 local mygroup = vim.api.nvim_create_augroup("mark", {clear = true})
 vim.api.nvim_create_autocmd(
