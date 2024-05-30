@@ -1,0 +1,161 @@
+
+set $mod Mod4
+
+default_floating_border pixel
+default_border pixel 
+smart_borders on
+font pango:DejaVu Sans Mono 14
+floating_modifier $mod 
+
+set $left h
+set $down j
+set $up k
+set $right l
+
+tiling_drag modifier titlebar
+
+#keybindings
+bindsym $mod+Shift+e exec i3-msg exit
+bindsym $mod+Return exec alacritty msg create-window || alacritty
+bindsym $mod+Shift+Return exec sudo -E alacritty 
+bindsym $mod+Shift+q exec sync && systemctl poweroff
+bindsym $mod+p exec gimp --no-splash
+bindsym Mod1+p exec pavucontrol
+bindsym Mod1+o exec .screenlayout/two.sh
+bindsym Mod1+Shift+o exec arandr
+bindsym $mod+o exec soffice
+bindsym $mod+w exec firefox
+bindsym Print exec hacksaw.sh
+bindsym F10 exec hacksaw.sh
+bindsym $mod+F10 exec shotgun.sh
+bindsym $mod+Print exec shotgun.sh
+bindsym $mod+r exec rox
+bindsym $mod+Shift+r exec sudo -E rox
+bindsym $mod+Shift+v exec cd ~/work && alacritty msg create-window -e nvim scratch.html || alacritty -e nvim scratch.html
+bindsym $mod+Shift+w exec chromium
+bindsym $mod+d exec mount.sh
+bindsym $mod+Shift+d exec umount.sh
+bindsym $mod+q kill
+bindsym Mod1+d exec "rofi -modi drun,run -show drun"
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# alternatively, you can use the cursor keys:
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# split in horizontal orientation
+bindsym $mod+b split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+Mod1+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# switch to workspace
+bindsym $mod+1 workspace number $ws1
+bindsym $mod+2 workspace number $ws2
+bindsym $mod+3 workspace number $ws3
+bindsym $mod+4 workspace number $ws4
+bindsym $mod+5 workspace number $ws5
+bindsym $mod+6 workspace number $ws6
+bindsym $mod+7 workspace number $ws7
+bindsym $mod+8 workspace number $ws8
+bindsym $mod+9 workspace number $ws9
+bindsym $mod+0 workspace number $ws10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+
+bindsym Shift+Mod1+$left       resize shrink width 10 px 
+bindsym Shift+Mod1+$down       resize grow height 10 px 
+bindsym Shift+Mod1+$up         resize shrink height 10 px 
+bindsym Shift+Mod1+$right      resize grow width 10 px 
+
+bindsym Shift+Left       resize shrink width 10 px 
+bindsym Shift+Down       resize grow height 10 px 
+bindsym Shift+Up         resize shrink height 10 px 
+bindsym Shift+Right      resize grow width 10 px 
+
+# Make the currently focused window a scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+# Show the first scratchpad window
+bindsym $mod+minus scratchpad show
+
+client.focused          #4c7899 #285577 #ffffff #2e9ef4   #900000
+client.focused_tab_title          #4c7899 #285577 #ffffff
+client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
+client.unfocused        #333333 #222222 #888888 #292d2e   #222222
+client.urgent           #2f343a #900000 #ffffff #900000   #900000
+client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
+
+bar {
+    status_command while ~/.config/sway/bar.sh; do sleep 30; done
+    colors {
+        statusline #90EE90
+        background #333333
+    }
+    #mode hide
+    #hidden_state hide
+    #modifier Mod1
+}
