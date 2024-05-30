@@ -1,7 +1,12 @@
--- Set <space> as the leader key
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.user_emmet_leader_key = ','
+
+vim.cmd [[
+let g:ale_pattern_options = {
+\   '.*(?!html)$': {'ale_enabled': 0},
+\}
+]]
 
 vim.cmd [[let g:user_emmet_settings = {
       \  'variables': {'lang': 'en'},
@@ -45,16 +50,9 @@ vim.opt.softtabstop = 2
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
--- Sets how neovim will display certain whitespace characters in the editor.
---  See `:help 'list'`
---  and `:help 'listchars'`
--- vim.opt.list = true
--- vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
-
 -- Preview substitutions live, as you type!
 -- vim.opt.inccommand = 'split'
 
--- Show which line your cursor is on
 vim.opt.cursorline = true
 vim.opt.scrolloff = 8
 
@@ -80,15 +78,8 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagn
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
--- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
--- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
--- is not what someone will guess without a bit more experience.
---
--- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
--- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
--- TIP: Disable arrow keys in normal mode
 vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
 vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
 vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
@@ -96,8 +87,6 @@ vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 vim.cmd [[command! Wq :wq]]
 
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
@@ -118,7 +107,9 @@ vim.keymap.set({ 'v', 'i', 'o' }, '<down>', '<Nop>')
 vim.keymap.set({ 'v', 'n', 'i', 'o' }, '<left>', '<Nop>')
 vim.keymap.set({ 'v', 'n', 'i', 'o' }, '<right>', '<Nop>')
 vim.keymap.set('n', '<C-n>', '<Cmd>Neotree toggle<CR>')
+vim.keymap.set('n', '<C-\\>', '<Cmd>ToggleTerm<CR>')
 vim.keymap.set('n', '<space>a', 'ggVG')
+vim.keymap.set('n', '<leader>td', '<Cmd>ToggleDiag<CR>')
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
@@ -128,7 +119,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
--- [[ Install `lazy.nvim` plugin manager ]]
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
@@ -136,45 +126,26 @@ if not vim.loop.fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
--- [[ Configure and install plugins ]]
 require('lazy').setup({
-  { 'folke/trouble.nvim' },
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  'WhoIsSethDaniel/toggle-lsp-diagnostics.nvim',
+  { 'kdheepak/cmp-latex-symbols' },
+  'dense-analysis/ale',
+  'tpope/vim-sleuth',
+  'BurntSushi/ripgrep',
   'mattn/emmet-vim',
   { 'windwp/nvim-ts-autotag', opts = {} },
-  'dense-analysis/ale',
   'norcalli/nvim-colorizer.lua',
   'ethanholz/nvim-lastplace',
   { 'akinsho/toggleterm.nvim', version = '*', config = true },
   'Yggdroot/indentLine',
-  -- Use `opts = {}` to force a plugin to be loaded.
-  --  This is equivalent to:
-  --    require('Comment').setup({})
-
-  -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
-
-  -- { -- Adds git related signs to the gutter, as well as utilities for managing changes
-  --   'lewis6991/gitsigns.nvim',
-  --   opts = {
-  --     signs = {
-  --       add = { text = '+' },
-  --       change = { text = '~' },
-  --       delete = { text = '_' },
-  --       topdelete = { text = '‾' },
-  --       changedelete = { text = '~' },
-  --     },
-  --   },
-  -- },
-
-  -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
-
   {
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
     branch = '0.1.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
+      'debugloop/telescope-undo.nvim',
       {
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make',
@@ -187,17 +158,11 @@ require('lazy').setup({
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
-      -- Two important keymaps to use while in Telescope are:
-      --  - Insert mode: <c-/>
-      --  - Normal mode: ?
-      --
-      -- This opens a window that shows you all of the keymaps for the current
-      -- Telescope picker. This is really useful to discover what Telescope can
-      -- do as well as how to actually do it!
-
-      -- [[ Configure Telescope ]]
       require('telescope').setup {
         extensions = {
+          undo = {
+            -- telescope-undo.nvim config, see below
+          },
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
           },
@@ -205,12 +170,19 @@ require('lazy').setup({
       }
 
       pcall(require('telescope').load_extension, 'fzf')
+      pcall(require('telescope').load_extension, 'undo')
       pcall(require('telescope').load_extension, 'ui-select')
 
       local builtin = require 'telescope.builtin'
+      local find_files = function()
+        builtin.find_files {
+          find_command = { 'rg', '--files', '--iglob', '!.git', '--hidden' },
+          previewer = false,
+        }
+      end
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<c-p>', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set('n', '<c-p>', find_files)
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
@@ -218,7 +190,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-
+      vim.keymap.set('n', '<leader>u', '<cmd>Telescope undo<cr>')
       vim.keymap.set('n', '<leader>/', function()
         builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
           winblend = 10,
@@ -238,13 +210,25 @@ require('lazy').setup({
       end, { desc = '[S]earch [N]eovim files' })
     end,
   },
-
+  'folke/trouble.nvim',
+  dependencies = { 'nvim-tree/nvim-web-devicons' },
+  opts = {
+    -- your configuration comes here
+    -- or leave it empty to use the default settings
+    -- refer to the configuration section below
+  },
+  { 'rust-lang/rust.vim' },
+  {
+    'mrcjkb/rustaceanvim',
+    version = '^4', -- Recommended
+    lazy = false, -- This plugin is already lazy
+  },
   {
     'neovim/nvim-lspconfig',
     dependencies = {
       'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
+      'williamboman/mason-lspconfig.nvim',
       { 'j-hui/fidget.nvim', opts = {} },
       { 'folke/neodev.nvim', opts = {} },
     },
@@ -271,7 +255,6 @@ require('lazy').setup({
             --   buffer = event.buf,
             --   callback = vim.lsp.buf.document_highlight,
             -- })
-
             vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
               buffer = event.buf,
               callback = vim.lsp.buf.clear_references,
@@ -283,6 +266,7 @@ require('lazy').setup({
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
       local servers = {
         html = { filetypes = { 'html' } },
+        elmls = { filetypes = { 'elm' } },
         tsserver = { filetypes = { 'typescript', 'javascript' } },
         volar = { filetypes = { 'vue' }, init_options = {
           vue = {
@@ -290,6 +274,7 @@ require('lazy').setup({
           },
         } },
         cssls = { filetypes = { 'css' } },
+        julials = {},
         lua_ls = {
           settings = {
             Lua = {
@@ -302,6 +287,7 @@ require('lazy').setup({
       }
       require('colorizer').setup()
       require('mason').setup()
+      require('toggle_lsp_diagnostics').init()
       require('nvim-lastplace').setup {}
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
@@ -319,7 +305,6 @@ require('lazy').setup({
       }
     end,
   },
-
   {
     'stevearc/conform.nvim',
     lazy = false,
@@ -346,12 +331,12 @@ require('lazy').setup({
         lua = { 'stylua' },
         javascript = { 'prettierd' },
         html = { 'prettierd' },
-        vue = { 'volar' },
-        css = { 'prettierd' },
+        vue = { 'prettierd' },
+        css = { 'stylelint_lsp' },
+        rust = { 'rustfmt' },
       },
     },
   },
-
   {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
@@ -364,17 +349,7 @@ require('lazy').setup({
           end
           return 'make install_jsregexp'
         end)(),
-        dependencies = {
-          -- `friendly-snippets` contains a variety of premade snippets.
-          --    See the README about individual language/framework/plugin snippets:
-          --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
-        },
+        dependencies = {},
       },
       'saadparwaiz1/cmp_luasnip',
       'hrsh7th/cmp-nvim-lsp',
@@ -384,7 +359,6 @@ require('lazy').setup({
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
       luasnip.config.setup {}
-
       cmp.setup {
         snippet = {
           expand = function(args)
@@ -414,11 +388,11 @@ require('lazy').setup({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+          { name = 'latex_symbols' },
         },
       }
     end,
   },
-
   {
     'ellisonleao/gruvbox.nvim',
     priority = 1000,
@@ -427,7 +401,6 @@ require('lazy').setup({
       vim.cmd.hi 'Comment gui=none'
     end,
   },
-
   {
     'echasnovski/mini.nvim',
     config = function()
@@ -445,14 +418,8 @@ require('lazy').setup({
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
-
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
       local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
       statusline.setup { use_icons = vim.g.have_nerd_font }
-
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function()
         return '%2l:%-2v'
