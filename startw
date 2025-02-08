@@ -1,0 +1,4 @@
+#!/bin/bash
+
+gsettings set org.cinnamon.desktop.interface can-change-accels true
+exec sway --unsupported-gpu
