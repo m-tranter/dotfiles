@@ -1,13 +1,3 @@
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
-vim.g.user_emmet_leader_key = ','
-
-vim.cmd [[
-let g:ale_pattern_options = {
-\   '.*(?!html)$': {'ale_enabled': 0},
-\}
-]]
-
 vim.cmd [[let g:user_emmet_settings = {
       \  'variables': {'lang': 'en'},
       \  'html': {
@@ -30,92 +20,80 @@ vim.cmd [[let g:user_emmet_settings = {
       \  },
       \}]]
 
+vim.api.nvim_create_user_command('W', 'w', {})
+vim.api.nvim_create_user_command('Wq', 'wq', {})
+vim.g.gruvbox_contrast_dark = 'hard'
 vim.g.have_nerd_font = true
-vim.opt.shortmess:append { I = true }
-vim.opt.number = true
-vim.opt.mouse = 'a'
-vim.opt.showmode = false
-vim.opt.clipboard = 'unnamedplus'
-vim.opt.breakindent = true
-vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
-vim.opt.undofile = true
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-vim.opt.signcolumn = 'yes'
-vim.opt.updatetime = 50
-vim.opt.timeoutlen = 300
-vim.opt.wrap = true
-vim.opt.tabstop = 2
-vim.opt.softtabstop = 2
-vim.opt.splitright = true
-vim.opt.splitbelow = true
-
--- Preview substitutions live, as you type!
--- vim.opt.inccommand = 'split'
-
-vim.opt.cursorline = true
-vim.opt.scrolloff = 8
-
--- From my old config
-vim.opt.guicursor = ''
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+vim.g.user_emmet_leader_key = ','
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.opt.backup = false
+vim.opt.breakindent = true
+vim.opt.clipboard = 'unnamedplus'
 vim.opt.colorcolumn = '80'
+vim.opt.cursorline = true
 vim.opt.foldlevel = 99
 vim.opt.foldmethod = 'indent'
 vim.opt.gdefault = true
-vim.opt.lazyredraw = true
-vim.opt.relativenumber = true
-vim.opt.ttyfast = true
-vim.opt.swapfile = false
-
--- Set highlight on search, but clear on pressing <Esc> in normal mode
+vim.opt.guicursor = ''
 vim.opt.hlsearch = true
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.opt.ignorecase = true
+vim.opt.lazyredraw = true
+vim.opt.mouse = 'a'
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.scrolloff = 8
+vim.opt.shortmess:append 'I'
+vim.opt.showmode = false
+vim.opt.signcolumn = 'yes'
+vim.opt.smartcase = true
+vim.opt.softtabstop = 2
+vim.opt.spell = true
+vim.opt.spelllang = 'en_gb'
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+vim.opt.swapfile = false
+vim.opt.tabstop = 2
+vim.opt.timeoutlen = 300
+vim.opt.ttyfast = true
+vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
+vim.opt.undofile = true
+vim.opt.updatetime = 50
+vim.opt.wrap = true
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
-
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-
-vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
-vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
-vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
-vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
-
-vim.cmd [[command! Wq :wq]]
+vim.keymap.set('n', '<down>', 'ddp', { desc = 'Move line down' })
+vim.keymap.set('n', '<up>', 'ddkP', { desc = 'Move line up' })
+vim.keymap.set({ 'v', 'i', 'o' }, '<down>', '<Nop>')
+vim.keymap.set({ 'v', 'i', 'o' }, '<up>', '<Nop>')
 
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-vim.keymap.set('n', '<Leader>w', '<C-w>v', { desc = 'Move focus to the upper window' })
-
+vim.keymap.set('n', '<Leader>w', '<C-w>v', { desc = 'Vertical split' })
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', 'N', 'Nzzzv')
 vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', '<Leader>P', '"_dP')
 vim.keymap.set('x', '<Leader>p', '"_dp')
 vim.keymap.set({ 'n', 'v', 'o' }, 'Q', '<Nop>')
-vim.keymap.set('n', '<up>', 'ddkP')
-vim.keymap.set('i', "<leader>'", '`')
-vim.keymap.set('n', '<down>', 'ddp')
-vim.keymap.set({ 'v', 'i', 'o' }, '<up>', '<Nop>')
-vim.keymap.set({ 'v', 'i', 'o' }, '<down>', '<Nop>')
-vim.keymap.set({ 'v', 'n', 'i', 'o' }, '<left>', '<Nop>')
-vim.keymap.set({ 'v', 'n', 'i', 'o' }, '<right>', '<Nop>')
 vim.keymap.set('n', '<C-n>', '<Cmd>Neotree toggle<CR>')
 vim.keymap.set('n', '<C-\\>', '<Cmd>ToggleTerm<CR>')
-vim.keymap.set('n', '<space>a', 'ggVG')
-vim.keymap.set('n', '<leader>td', '<Cmd>ToggleDiag<CR>')
+vim.keymap.set('n', '<space>a', 'ggVG$', { desc = 'Select entire buffer' })
+vim.keymap.set('n', '<leader>td', '<Cmd>ToggleDiag<CR>', { desc = 'Toggle diagnostics (requires plugin)' })
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
-    vim.highlight.on_yank()
+    vim.highlight.on_yank { higroup = 'IncSearch', timeout = 200 }
   end,
 })
 
@@ -127,9 +105,19 @@ end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-  'WhoIsSethDaniel/toggle-lsp-diagnostics.nvim',
-  { 'kdheepak/cmp-latex-symbols' },
-  'dense-analysis/ale',
+  {
+    'folke/trouble.nvim',
+    opts = {},
+    cmd = 'Trouble',
+    keys = {
+      { '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>', desc = 'Diagnostics (Trouble)' },
+      { '<leader>xX', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', desc = 'Buffer Diagnostics (Trouble)' },
+      { '<leader>cs', '<cmd>Trouble symbols toggle focus=false<cr>', desc = 'Symbols (Trouble)' },
+      { '<leader>cl', '<cmd>Trouble lsp toggle focus=false win.position=right<cr>', desc = 'LSP Definitions / references / ... (Trouble)' },
+      { '<leader>xL', '<cmd>Trouble loclist toggle<cr>', desc = 'Location List (Trouble)' },
+      { '<leader>xQ', '<cmd>Trouble qflist toggle<cr>', desc = 'Quickfix List (Trouble)' },
+    },
+  },
   'tpope/vim-sleuth',
   'BurntSushi/ripgrep',
   'mattn/emmet-vim',
@@ -146,26 +134,14 @@ require('lazy').setup({
     dependencies = {
       'nvim-lua/plenary.nvim',
       'debugloop/telescope-undo.nvim',
-      {
-        'nvim-telescope/telescope-fzf-native.nvim',
-        build = 'make',
-        cond = function()
-          return vim.fn.executable 'make' == 1
-        end,
-      },
-      { 'nvim-telescope/telescope-ui-select.nvim' },
-
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      'nvim-telescope/telescope-fzf-native.nvim',
+      'nvim-telescope/telescope-ui-select.nvim',
     },
     config = function()
       require('telescope').setup {
         extensions = {
-          undo = {
-            -- telescope-undo.nvim config, see below
-          },
-          ['ui-select'] = {
-            require('telescope.themes').get_dropdown(),
-          },
+          undo = {},
+          ['ui-select'] = require('telescope.themes').get_dropdown(),
         },
       }
 
@@ -174,15 +150,9 @@ require('lazy').setup({
       pcall(require('telescope').load_extension, 'ui-select')
 
       local builtin = require 'telescope.builtin'
-      local find_files = function()
-        builtin.find_files {
-          find_command = { 'rg', '--files', '--iglob', '!.git', '--hidden' },
-          previewer = false,
-        }
-      end
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<c-p>', find_files)
+      vim.keymap.set('n', '<c-p>', builtin.find_files, { desc = 'Find Files' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
@@ -190,32 +160,11 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-      vim.keymap.set('n', '<leader>u', '<cmd>Telescope undo<cr>')
+      vim.keymap.set('n', '<leader>u', '<cmd>Telescope undo<cr>', { desc = 'Undo Tree' })
       vim.keymap.set('n', '<leader>/', function()
-        builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-          winblend = 10,
-          previewer = false,
-        })
+        builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown { winblend = 10, previewer = false })
       end, { desc = '[/] Fuzzily search in current buffer' })
-
-      vim.keymap.set('n', '<leader>s/', function()
-        builtin.live_grep {
-          grep_open_files = true,
-          prompt_title = 'Live Grep in Open Files',
-        }
-      end, { desc = '[S]earch [/] in Open Files' })
-
-      vim.keymap.set('n', '<leader>sn', function()
-        builtin.find_files { cwd = vim.fn.stdpath 'config' }
-      end, { desc = '[S]earch [N]eovim files' })
     end,
-  },
-  'folke/trouble.nvim',
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
-  opts = {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
   },
   { 'rust-lang/rust.vim' },
   {
@@ -239,36 +188,36 @@ require('lazy').setup({
           local map = function(keys, func, desc)
             vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
-          map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-          map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-          map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-          map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-          map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-          map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
           map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
           map('K', vim.lsp.buf.hover, 'Hover Documentation')
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.server_capabilities.documentHighlightProvider then
-            -- vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-            --   buffer = event.buf,
-            --   callback = vim.lsp.buf.document_highlight,
-            -- })
+          local client = event.data and vim.lsp.get_client_by_id(event.data.client_id)
+          if client and client.server_capabilities and client.server_capabilities.documentHighlightProvider then
+            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+              buffer = event.buf,
+              callback = vim.lsp.buf.document_highlight,
+            })
+
             vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
               buffer = event.buf,
-              callback = vim.lsp.buf.clear_references,
+              callback = function()
+                if vim.fn.mode() ~= 'i' then
+                  vim.lsp.buf.clear_references()
+                end
+              end,
             })
           end
         end,
       })
       local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities.textDocument.formatting = nil
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
       local servers = {
         html = { filetypes = { 'html' } },
         elmls = { filetypes = { 'elm' } },
-        tsserver = { filetypes = { 'typescript', 'javascript' } },
-        volar = { filetypes = { 'vue' }, init_options = {
+        ts_ls = { filetypes = { 'html', 'typescript', 'javascript' } },
+        volar = { filetypes = { 'vue', 'html' }, init_options = {
           vue = {
             hybridMode = false,
           },
@@ -287,7 +236,6 @@ require('lazy').setup({
       }
       require('colorizer').setup()
       require('mason').setup()
-      require('toggle_lsp_diagnostics').init()
       require('nvim-lastplace').setup {}
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
@@ -331,8 +279,10 @@ require('lazy').setup({
         lua = { 'stylua' },
         javascript = { 'prettierd' },
         html = { 'prettierd' },
+        json = { 'prettierd' },
         vue = { 'prettierd' },
-        css = { 'stylelint_lsp' },
+        css = { 'stylelint' },
+        sh = { 'shfmt' },
         rust = { 'rustfmt' },
       },
     },
@@ -464,5 +414,4 @@ require('lazy').setup({
     },
   },
 })
-
 -- vim: ts=2 sts=2 sw=2 et
