@@ -1,7 +1,3 @@
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
-vim.g.user_emmet_leader_key = ','
-
 vim.cmd [[let g:user_emmet_settings = {
       \  'variables': {'lang': 'en'},
       \  'html': {
@@ -24,95 +20,80 @@ vim.cmd [[let g:user_emmet_settings = {
       \  },
       \}]]
 
+vim.api.nvim_create_user_command('W', 'w', {})
+vim.api.nvim_set_keymap('n', 'Wq', ':wq<CR>', { noremap = true, silent = true })
+vim.g.gruvbox_contrast_dark = 'hard'
 vim.g.have_nerd_font = true
-vim.opt.shortmess:append { I = true }
-vim.opt.number = true
-vim.opt.mouse = 'a'
-vim.opt.showmode = false
-vim.opt.clipboard = 'unnamedplus'
-vim.opt.breakindent = true
-vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
-vim.opt.undofile = true
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-vim.opt.signcolumn = 'yes'
-vim.opt.updatetime = 50
-vim.opt.timeoutlen = 300
-vim.opt.wrap = true
-vim.opt.tabstop = 2
-vim.opt.softtabstop = 2
-vim.opt.splitright = true
-vim.opt.splitbelow = true
-
-vim.opt.spelllang = 'en_gb'
-vim.opt.spell = true
-
--- Preview substitutions live, as you type!
--- vim.opt.inccommand = 'split'
-
-vim.opt.cursorline = true
-vim.opt.scrolloff = 8
-
--- From my old config
-vim.opt.guicursor = ''
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+vim.g.user_emmet_leader_key = ','
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.opt.backup = false
+vim.opt.breakindent = true
+vim.opt.clipboard = 'unnamedplus'
 vim.opt.colorcolumn = '80'
+vim.opt.cursorline = true
 vim.opt.foldlevel = 99
 vim.opt.foldmethod = 'indent'
 vim.opt.gdefault = true
-vim.opt.lazyredraw = true
-vim.opt.relativenumber = true
-vim.opt.ttyfast = true
-vim.opt.swapfile = false
-
--- Set highlight on search, but clear on pressing <Esc> in normal mode
+vim.opt.guicursor = ''
 vim.opt.hlsearch = true
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.opt.ignorecase = true
+vim.opt.lazyredraw = true
+vim.opt.mouse = 'a'
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.scrolloff = 8
+vim.opt.shortmess:append 'I'
+vim.opt.showmode = false
+vim.opt.signcolumn = 'yes'
+vim.opt.smartcase = true
+vim.opt.softtabstop = 2
+vim.opt.spell = true
+vim.opt.spelllang = 'en_gb'
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+vim.opt.swapfile = false
+vim.opt.tabstop = 2
+vim.opt.timeoutlen = 300
+vim.opt.ttyfast = true
+vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
+vim.opt.undofile = true
+vim.opt.updatetime = 50
+vim.opt.wrap = true
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
-
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-
-vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
-vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
-vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
-vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
-
-vim.cmd [[command! W :w]]
+vim.keymap.set('n', '<down>', 'ddp', { desc = 'Move line down' })
+vim.keymap.set('n', '<up>', 'ddkP', { desc = 'Move line up' })
+vim.keymap.set({ 'v', 'i', 'o' }, '<down>', '<Nop>')
+vim.keymap.set({ 'v', 'i', 'o' }, '<up>', '<Nop>')
 
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-vim.keymap.set('n', '<Leader>w', '<C-w>v', { desc = 'Move focus to the upper window' })
-
+vim.keymap.set('n', '<Leader>w', '<C-w>v', { desc = 'Vertical split' })
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', 'N', 'Nzzzv')
 vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', '<Leader>P', '"_dP')
 vim.keymap.set('x', '<Leader>p', '"_dp')
 vim.keymap.set({ 'n', 'v', 'o' }, 'Q', '<Nop>')
-vim.keymap.set('n', '<up>', 'ddkP')
-vim.keymap.set('i', "<leader>'", '`')
-vim.keymap.set('n', '<down>', 'ddp')
-vim.keymap.set({ 'v', 'i', 'o' }, '<up>', '<Nop>')
-vim.keymap.set({ 'v', 'i', 'o' }, '<down>', '<Nop>')
-vim.keymap.set({ 'v', 'n', 'i', 'o' }, '<left>', '<Nop>')
-vim.keymap.set({ 'v', 'n', 'i', 'o' }, '<right>', '<Nop>')
 vim.keymap.set('n', '<C-n>', '<Cmd>Neotree toggle<CR>')
 vim.keymap.set('n', '<C-\\>', '<Cmd>ToggleTerm<CR>')
-vim.keymap.set('n', '<space>a', 'ggVG')
-vim.keymap.set('n', '<leader>td', '<Cmd>ToggleDiag<CR>')
+vim.keymap.set('n', '<space>a', 'ggVG$', { desc = 'Select entire buffer' })
+vim.keymap.set('n', '<leader>td', '<Cmd>ToggleDiag<CR>', { desc = 'Toggle diagnostics (requires plugin)' })
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
-    vim.highlight.on_yank()
+    vim.highlight.on_yank { higroup = 'IncSearch', timeout = 200 }
   end,
 })
 
@@ -126,7 +107,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   {
     'folke/trouble.nvim',
-    opts = {}, -- for default options, refer to the configuration section for custom setup.
+    opts = {},
     cmd = 'Trouble',
     keys = {
       {
@@ -241,13 +222,6 @@ require('lazy').setup({
       end, { desc = '[S]earch [N]eovim files' })
     end,
   },
-  'folke/trouble.nvim',
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
-  opts = {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
-  },
   { 'rust-lang/rust.vim' },
   {
     'mrcjkb/rustaceanvim',
@@ -280,15 +254,20 @@ require('lazy').setup({
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
           map('K', vim.lsp.buf.hover, 'Hover Documentation')
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.server_capabilities.documentHighlightProvider then
-            -- vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-            --   buffer = event.buf,
-            --   callback = vim.lsp.buf.document_highlight,
-            -- })
+          local client = event.data and vim.lsp.get_client_by_id(event.data.client_id)
+          if client and client.server_capabilities and client.server_capabilities.documentHighlightProvider then
+            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+              buffer = event.buf,
+              callback = vim.lsp.buf.document_highlight,
+            })
+
             vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
               buffer = event.buf,
-              callback = vim.lsp.buf.clear_references,
+              callback = function()
+                if vim.fn.mode() ~= 'i' then
+                  vim.lsp.buf.clear_references()
+                end
+              end,
             })
           end
         end,
@@ -363,7 +342,8 @@ require('lazy').setup({
         html = { 'prettierd' },
         json = { 'prettierd' },
         vue = { 'prettierd' },
-        css = { 'stylelint_lsp' },
+        css = { 'stylelint' },
+        sh = { 'shfmt' },
         rust = { 'rustfmt' },
       },
     },
@@ -532,5 +512,4 @@ require('lazy').setup({
     },
   },
 })
-
 -- vim: ts=2 sts=2 sw=2 et
