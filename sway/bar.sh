@@ -15,22 +15,21 @@ while true; do
         wifi='󰊠 '
     fi
 
-    COL="#90EE90"
-
+    COL="#FFA500"
     if [ "$battery_status" = "discharging" ]; then
-
         if [ "$battery_charge" -lt 15 ]; then
             COL="#8B0000"
-        elif [ "$battery_charge" -gt 99 ]; then
-            COL="#FFA500"
+        elif [ "$battery_charge" -lt 99 ]; then
+            COL="#90EE90"
         fi
+
         battery_pluggedin='  '
     else
         battery_pluggedin=' '
     fi
     echo ",[{\"name\":\"wifi\",\"full_text\":\" $wifi \"}, \
-        {\"name\":\"charging\",\"full_text\":\" $battery_pluggedin \"}, \
-            {\"name\":\"charge\",\"full_text\":\" $battery_charge% \",\"color\":\"$COL\"}, \
+        {\"name\":\"charging\",\"full_text\":\" $battery_pluggedin\",\"separator\":false}, \
+            {\"name\":\"charge\",\"full_text\":\"$battery_charge% \",\"color\":\"$COL\"}, \
                 {\"name\":\"time\",\"full_text\":\" $current_time\"}]"
     sleep 30
 done
