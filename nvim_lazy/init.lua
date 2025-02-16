@@ -113,7 +113,11 @@ require('lazy').setup({
       { '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>', desc = 'Diagnostics (Trouble)' },
       { '<leader>xX', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', desc = 'Buffer Diagnostics (Trouble)' },
       { '<leader>cs', '<cmd>Trouble symbols toggle focus=false<cr>', desc = 'Symbols (Trouble)' },
-      { '<leader>cl', '<cmd>Trouble lsp toggle focus=false win.position=right<cr>', desc = 'LSP Definitions / references / ... (Trouble)' },
+      {
+        '<leader>cl',
+        '<cmd>Trouble lsp toggle focus=false win.position=right<cr>',
+        desc = 'LSP Definitions / references / ... (Trouble)',
+      },
       { '<leader>xL', '<cmd>Trouble loclist toggle<cr>', desc = 'Location List (Trouble)' },
       { '<leader>xQ', '<cmd>Trouble qflist toggle<cr>', desc = 'Quickfix List (Trouble)' },
     },
@@ -175,9 +179,6 @@ require('lazy').setup({
   {
     'neovim/nvim-lspconfig',
     dependencies = {
-      'williamboman/mason.nvim',
-      'WhoIsSethDaniel/mason-tool-installer.nvim',
-      'williamboman/mason-lspconfig.nvim',
       { 'j-hui/fidget.nvim', opts = {} },
       { 'folke/neodev.nvim', opts = {} },
     },
@@ -198,7 +199,6 @@ require('lazy').setup({
               buffer = event.buf,
               callback = vim.lsp.buf.document_highlight,
             })
-
             vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
               buffer = event.buf,
               callback = function()
@@ -215,15 +215,16 @@ require('lazy').setup({
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
       local servers = {
         html = { filetypes = { 'html' } },
-        elmls = { filetypes = { 'elm' } },
         ts_ls = { filetypes = { 'html', 'typescript', 'javascript' } },
-        volar = { filetypes = { 'vue', 'html' }, init_options = {
-          vue = {
-            hybridMode = false,
+        volar = {
+          filetypes = { 'vue', 'html' },
+          init_options = {
+            vue = {
+              hybridMode = false,
+            },
           },
-        } },
-        cssls = { filetypes = { 'css' } },
-        julials = {},
+        },
+        cssls = { filetypes = { 'css', 'html' } },
         lua_ls = {
           settings = {
             Lua = {
@@ -235,22 +236,11 @@ require('lazy').setup({
         },
       }
       require('colorizer').setup()
-      require('mason').setup()
       require('nvim-lastplace').setup {}
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
       })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-      require('mason-lspconfig').setup {
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
-      }
     end,
   },
   {
@@ -361,7 +351,6 @@ require('lazy').setup({
       --  - yinq - [Y]ank [I]nside [N]ext [']quote
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
-
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
       --
       -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
@@ -414,4 +403,34 @@ require('lazy').setup({
     },
   },
 })
+-- Add this to your Neovim configuration
+local lspconfig = require 'lspconfig'
+
+lspconfig.bashls.setup {}
+lspconfig.cssls.setup {
+  filetypes = { 'html' },
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+}
+lspconfig.html.setup {
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+}
+lspconfig.lua_ls.setup {
+  settings = {
+    Lua = {
+      completion = {
+        callSnippet = 'Replace',
+      },
+    },
+  },
+}
+lspconfig.rust_analyzer.setup {}
+lspconfig.ts_ls.setup {}
+lspconfig.volar.setup {
+  filetypes = { 'vue', 'html' },
+  init_options = {
+    vue = {
+      hybridMode = false,
+    },
+  },
+}
 -- vim: ts=2 sts=2 sw=2 et
