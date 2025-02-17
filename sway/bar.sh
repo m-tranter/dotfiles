@@ -22,9 +22,11 @@ while true; do
         elif [ "$battery_charge" -lt 99 ]; then
             COL="#90EE90"
         fi
-
         battery_pluggedin='  '
     else
+        if [ "$battery_charge" -lt 99 ]; then
+            COL="#90EE90"
+        fi
         battery_pluggedin=' '
     fi
     echo ",[{\"name\":\"wifi\",\"full_text\":\" $wifi \"}, \
