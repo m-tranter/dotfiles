@@ -281,7 +281,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         javascript = { 'prettierd' },
-        html = { 'htmlhint' },
+        html = { 'prettierd' },
         json = { 'prettierd' },
         vue = { 'prettierd' },
         css = { 'prettierd' },
