@@ -1,4 +1,3 @@
-#!/bin/bash
 echo '{ "version": 1 }'
 echo '['
 echo '[]'
@@ -18,6 +17,7 @@ while true; do
     COL="#FFA500"
     if [ "$battery_status" = "discharging" ]; then
         if [ "$battery_charge" -lt 15 ]; then
+            play -n -c1 synth .3 sin 667 &>/dev/null
             COL="#8B0000"
         elif [ "$battery_charge" -lt 99 ]; then
             COL="#90EE90"
@@ -26,7 +26,11 @@ while true; do
     else
         if [ "$battery_charge" -lt 99 ]; then
             COL="#90EE90"
+        elif [ "$battery_charge" -eq 100 ]; then
+            play -n -c1 synth .3 sin 667 &>/dev/null
+            COL="#90EE90"
         fi
+
         battery_pluggedin=' '
     fi
     echo ",[{\"name\":\"wifi\",\"full_text\":\" $wifi \"}, \
